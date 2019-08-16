@@ -34,4 +34,4 @@ chain(myObject)
     (/* ...args */)
     (/* ...args */)
     .val();                 // the return value of otherObjectsMethod(), unwrapped
-    ```
+```
