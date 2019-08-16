@@ -1,7 +1,7 @@
 # wrapper-chain
 
 ===== Syntactical Use Cases =====
-```
+```javascript
 chain(myFunction)
     (/* first call */)
     (/* second call */)
