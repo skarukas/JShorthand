@@ -91,7 +91,7 @@ makeWrapper(myObject)
 "public" name               "private" alias               description
 
 `Wrapper.pass(targetObj?)`    `Wrapper.$pass(targetObj?)`   returns the wrapped (if possible) return value of the last function, `$currValue`
-                                                            -If `targetObj` is specified, it will be wrapped instead of the last return value
+                                                            -If `targetObj` is specified, it will be wrapped instead of the last return value 
                                                             -For clearer syntax, specifying `targetObj` should generally 
                                                                 be avoided in favor of a separate statement
 `Wrapper.val()`               `Wrapper.$val()`              returns `$currValue`, the (unwrapped) return value of the last function
