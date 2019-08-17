@@ -1,7 +1,6 @@
 # wrapper-chain
 
-Allows syntactical chaining of JavaScript objects and functions with a simple wrapper.
-Designed to make repeated calls to mutator methods (or other methods with unimportant return values) simpler.
+Allows chaining of JavaScript objects and functions with a simple wrapper; designed to make repeated calls to mutator methods (or other methods with unimportant return values) more syntactically elegant.
 
 # Syntactical Use Cases
 
