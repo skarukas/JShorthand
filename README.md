@@ -56,7 +56,7 @@ makeWrapper(myFuncTest)
     (/* input */,            /* expectedOutput */)
     (/* input */,            /* expectedOutput */);
 ```
-In this case, `pass()` transfers the wrapper from `myObject` to the object returned by `myObject.myOtherMethod`.
+In this case, `pass()` transfers the wrapper from `myObject` to the object returned by the second call to `myObject.myOtherMethod()`.
 ```javascript
 makeWrapper(myObject)
     .myMethod
