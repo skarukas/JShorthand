@@ -9,20 +9,23 @@ var myArr = [6, 1, 2];
 myArr.push(9);
 myArr.push(4);
 myArr.push(3);
+myArr.push(0.1);
+myArr.push(0.1);
+myArr.push(0.1);
 myArr.sort();
 myArr.splice(0, 2);
 
-console.log(myArr); // [3, 4, 6, 9]
+console.log(myArr); // [0.1, 1, 2, 3, 4, 6, 9]
 ```
 becomes
 ```javascript
 var myArr = [6, 1, 2];
 makeWrapper(myArr)
-    .push(9)(4)(3)
+    .push(9)(4)(3)(0.1)()()
     .sort()
     .splice(0, 2);
     
-console.log(myArr); // [3, 4, 6, 9]
+console.log(myArr); // [0.1, 1, 2, 3, 4, 6, 9]
 ```
 Logging many messages:
 ```javascript
