@@ -1,9 +1,22 @@
 # wrapper-chain
 
-# Syntactical Use Cases 
+Allows syntactical chaining of JavaScript objects and functions with a simple wrapper.
+Designed to make repeated calls to mutator methods (or other methods with unimportant return values) simpler.
 
-Repeatedly calling a function with different arguments. 
-This is useful for things like assert functions or logging:
+# Syntactical Use Cases
+
+```javascript
+var myArr = [0, 1, 2];
+myArr.push(3);
+myArr.push(4);
+myArr.push(5);
+```
+becomes
+```javascript
+var myArr = [0, 1, 2];
+makeWrapper(myArr).push(3)(4)(5);
+```
+Logging many messages:
 ```javascript
 makeWrapper(console.log)
     ("First Message")
@@ -26,7 +39,8 @@ makeWrapper(console.log)("Hello, World")()();
 ```
 Creating a table of test cases:
 ```javascript
-// takes a function as input and returns a function to be immediately called with input and expected result
+// takes a function as input and returns another function to be 
+//    immediately called with input and expected result as arguments
 function myCurriedAssertFunction(fn) {
     var inner = function(input, expect) {
         if (fn.apply(this, input) === expect) return;
