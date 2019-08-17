@@ -88,26 +88,26 @@ makeWrapper(myObject)
     .val();            // the return value of otherObjectsMethod(), (unwrapped)
 ```
 
-"public" name               "private" alias               description
-
-`Wrapper.pass(targetObj?)`    `Wrapper.$pass(targetObj?)`   returns the wrapped (if possible) return value of the last function, `$currValue`
-                                                            -If `targetObj` is specified, it will be wrapped instead of the last return value 
-                                                            -For clearer syntax, specifying `targetObj` should generally 
-                                                                be avoided in favor of a separate statement
-`Wrapper.val()`               `Wrapper.$val()`              returns `$currValue`, the (unwrapped) return value of the last function
-`Wrapper.unwrap()`            `Wrapper.$unwrap()`           returns `$ref`, the inner object
-                                                            -The object is stored by reference, so `unwrap()` isn't necessary in most cases
-`Wrapper.do(fn, ...args?)`    `Wrapper.$do(fn, ...args?)`   calls `fn` with `Wrapper` as its first argument and `args` as the rest
-
-property                initial value           description
-
-- `Wrapper.$currMethod`     `"$pass"`                 The name of the last called method
-- `Wrapper.$ref`            `obj` (input)             A reference to the object being wrapped; immutable
-- `Wrapper.$currValue`      `obj` (input)             The value returned by the last function
-- `Wrapper.$currArgs`       `[]`                      The last arguments passed to `$currMethod`
 
 
-handling 
+- `Wrapper.pass(targetObj?)`: Returns the wrapped (if possible) return value of the last function, `$currValue`
+  - If `targetObj` is specified, it will be wrapped instead of the last return value 
+  - For clearer syntax, specifying `targetObj` should generally be avoided in favor of a separate statement
+- `Wrapper.val()`: Returns `$currValue`, the (unwrapped) return value of the last function
+- `Wrapper.unwrap()`: Returns `$ref`, the inner object
+  - The object is stored by reference, so `unwrap()` isn't necessary in most cases
+- `Wrapper.do(fn, ...args?)`: Calls `fn` with `Wrapper` as its first argument and `args` as the rest
+###### private fields
+- `Wrapper.$currMethod`: The name of the last called method. Initialized to `"$pass"`                 
+- `Wrapper.$ref`: A reference to the object being wrapped; immutable.
+- `Wrapper.$currValue`: The value returned by the last function. Initialized to `$ref`.
+- `Wrapper.$currArgs`: The last arguments passed to `$currMethod`.Initialized to `[]`.
+- `Wrapper.$pass()`: alias for `pass()`.
+- `Wrapper.$val()`: alias for `val()`.
+- `Wrapper.$unwrap()`: alias for `unwrap()`.
+- `Wrapper.$do()`: alias for `do()`.
+
+###### handling 
 
 - `makeWrapper(myObj)()` calls `$pass()`, see below
 - `makeWrapper(myObj).pass()` returns the wrapper if no arguments are specified
