@@ -94,7 +94,7 @@ makeWrapper(myObject)
 - `Wrapper.unwrap()`: Returns `$ref`, the inner object
   - The object is stored by reference, so `unwrap()` isn't necessary in most cases
 - `Wrapper.do(fn, ...args?)`: Calls `fn` with `Wrapper` as its first argument and `args` as the rest
-##### private fields
+#### private fields
 - `Wrapper.$currMethod`: The name of the last called method. Initialized to `"$pass"`                 
 - `Wrapper.$ref`: A reference to the object being wrapped; immutable.
 - `Wrapper.$currValue`: The value returned by the last function. Initialized to `$ref`.
@@ -103,7 +103,7 @@ makeWrapper(myObject)
 - `Wrapper.$val()`: alias for `val()`.
 - `Wrapper.$unwrap()`: alias for `unwrap()`.
 - `Wrapper.$do()`: alias for `do()`.
-##### handling 
+#### handling 
 - `makeWrapper(myObj)()` calls `$pass()`, see below
 - `makeWrapper(myObj).pass()` returns the wrapper if no arguments are specified
 - `makeWrapper(myObj).val()` returns the inner object, like `$unwrap()`
