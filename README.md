@@ -52,18 +52,22 @@ Creating a table of test cases:
 function myCurriedAssertFunction(fn) {
     var inner = function(input, expect) {
         if (fn.apply(this, input) === expect) return;
-        else throw new Error("Test Failed. " + input + " != " + expect);
+        else throw new Error("Test failed. " + input + " != " + expect);
     }
     return inner;
 }
 
-var myFuncTest = myCurriedAssertFunction(myFunc);
+function add1(n) {
+    return n + 1;
+}
 
-makeWrapper(myFuncTest)
-    (/* input */,            /* expectedOutput */)
-    (/* input */,            /* expectedOutput */)
-    (/* input */,            /* expectedOutput */)
-    (/* input */,            /* expectedOutput */);
+var addTest = myCurriedAssertFunction(add1);
+makeWrapper(addTest)
+    (1034,            1035)
+    (34812,           34813)
+    (19.5,            20.5)
+    (23,              22)  // Error: Test failed. 23 != 22
+    (34,              35); // not executed
 ```
 In this case, `pass()` transfers the wrapper from `myObject` to the object returned by the second call to `myObject.myOtherMethod()`.
 ```javascript
