@@ -87,6 +87,7 @@ makeWrapper(myObject)
     (/* ...args */)
     .val();            // the return value of otherObjectsMethod(), (unwrapped)
 ```
+#### public methods
 - `Wrapper.pass(targetObj?)`: Returns the wrapped (if possible) return value of the last function, `$currValue`
   - If `targetObj` is specified, it will be wrapped instead of the last return value 
   - For clearer syntax, specifying `targetObj` should generally be avoided in favor of a separate statement
