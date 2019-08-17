@@ -101,14 +101,14 @@ makeWrapper(myObject)
 
 property                initial value           description
 
--`Wrapper.$currMethod`     `"$pass"`                 The name of the last called method
--`Wrapper.$ref`            `obj` (input)             A reference to the object being wrapped; immutable
--`Wrapper.$currValue`      `obj` (input)             The value returned by the last function
--`Wrapper.$currArgs`       `[]`                      The last arguments passed to `$currMethod`
+- `Wrapper.$currMethod`     `"$pass"`                 The name of the last called method
+- `Wrapper.$ref`            `obj` (input)             A reference to the object being wrapped; immutable
+- `Wrapper.$currValue`      `obj` (input)             The value returned by the last function
+- `Wrapper.$currArgs`       `[]`                      The last arguments passed to `$currMethod`
 
 
 handling 
 
--`makeWrapper(myObj)()` calls `$pass()`, see below
--`makeWrapper(myObj).pass()` returns the wrapper if no arguments are specified
--`makeWrapper(myObj).val()` returns the inner object, like `$unwrap()`
+- `makeWrapper(myObj)()` calls `$pass()`, see below
+- `makeWrapper(myObj).pass()` returns the wrapper if no arguments are specified
+- `makeWrapper(myObj).val()` returns the inner object, like `$unwrap()`
