@@ -3,17 +3,26 @@
 Allows chaining of JavaScript objects and functions with a simple wrapper; designed to make repeated calls to mutator methods (or other methods with unimportant return values) more syntactically elegant.
 
 # Syntactical Use Cases
-
+Modifying an array:
 ```javascript
-var myArr = [0, 1, 2];
-myArr.push(3);
+var myArr = [6, 1, 2];
+myArr.push(9);
 myArr.push(4);
-myArr.push(5);
+myArr.push(3);
+myArr.sort();
+myArr.splice(0, 2);
+
+console.log(myArr); // [3, 4, 6, 9]
 ```
 becomes
 ```javascript
-var myArr = [0, 1, 2];
-makeWrapper(myArr).push(3)(4)(5);
+var myArr = [6, 1, 2];
+makeWrapper(myArr)
+    .push(9)(4)(3)
+    .sort()
+    .splice(0, 2);
+    
+console.log(myArr); // [3, 4, 6, 9]
 ```
 Logging many messages:
 ```javascript
