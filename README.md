@@ -89,7 +89,7 @@ makeWrapper(myObject)
 ```
 # Documentation
 
-## public `Wrapper` class methods*
+## public `Wrapper` "class"* methods
 #### `.pass(targetObj?)`
 Returns the wrapped (if possible) return value of the last function, `$currValue`. If `targetObj` is specified, it will be wrapped instead of the last return value. However, beginning a separate wrapping statement is probably syntactically clearer.
 #### `.val()`
@@ -120,3 +120,6 @@ The initialized values listed above result in the following "edge-cases":
 - `makeWrapper(myObj)()` calls `$pass()`, see below.
 - `makeWrapper(myObj).pass()` returns the wrapper, assuming no arguments are specified.
 - `makeWrapper(myObj).val()` returns `$ref`, the inner object.
+
+##### Current Issues
+- As a `Function`, `Wrapper` has read-only properties `length` and `name` which cannot be overwritten. This causes a problem when wrapping any collection-type object or any other object with those named properties. In general, fields that cannot be overwritten are made accessible by prepending $, like `.$length` or `.$name`.
