@@ -90,30 +90,30 @@ makeWrapper(myObject)
 # Documentation
 
 ## public `Wrapper` class methods*
-##### `.pass(targetObj?)`
+#### `.pass(targetObj?)`
 Returns the wrapped (if possible) return value of the last function, `$currValue`. If `targetObj` is specified, it will be wrapped instead of the last return value. However, beginning a separate wrapping statement is probably syntactically clearer.
-##### `.val()`
+#### `.val()`
 Returns `$currValue`, the (unwrapped) return value of the last function.
-##### `.unwrap()`
-Returns `$ref`, the inner object. The object is stored by reference, so `unwrap()` isn't necessary in most cases.
-##### `.do(fn, ...args?)`
+#### `.unwrap()`
+Returns `$ref`, the inner object. The object is stored by reference, so `unwrap()` is not usually necessary.
+#### `.do(fn, ...args?)`
 Calls `fn` with `Wrapper` as its first argument and `args` as the rest.
 ## private fields
-##### `.$currMethod`
+#### `.$currMethod`
 The name of the last called method. Initialized to `"$pass"`                 
-##### `.$ref`
+#### `.$ref`
 A reference to the object being wrapped; immutable.
-##### `.$currValue`
+#### `.$currValue`
 The value returned by the last function. Initialized to `$ref`.
-##### `.$currArgs`
+#### `.$currArgs`
 The last arguments passed to `$currMethod`.Initialized to `[]`.
-##### `.$pass()`
+#### `.$pass()`
 alias for `pass()`.
-##### `.$val()`
+#### `.$val()`
 alias for `val()`.
-##### `.$unwrap()`
+#### `.$unwrap()`
 alias for `unwrap()`.
-##### `.$do()`
+#### `.$do()`
 alias for `do()`.
 
 The initialized values listed above result in the following "edge-cases":
