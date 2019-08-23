@@ -3,6 +3,7 @@ A small bit of code that allows chaining of JavaScript objects and functions wit
 # Syntactical Use Cases
 Modifying an array:
 ```javascript
+// vanilla javascript
 var myArr = [6, 1, 2];
 myArr.push(9);
 myArr.push(4);
@@ -12,19 +13,17 @@ myArr.push(0.1);
 myArr.push(0.1);
 myArr.sort();
 myArr.splice(0, 2);
-
 console.log(myArr); // [0.1, 1, 2, 3, 4, 6, 9]
-```
-becomes
-```javascript
+
+// with wrapper
 var myArr = [6, 1, 2];
 makeWrapper(myArr)
     .push(9)(4)(3)(0.1)()()
     .sort()
     .splice(0, 2);
-    
 console.log(myArr); // [0.1, 1, 2, 3, 4, 6, 9]
 ```
+
 Logging many messages:
 ```javascript
 makeWrapper(console.log)
@@ -37,6 +36,7 @@ makeWrapper(console.log)
 // Second Message
 // Third Message
 ```
+
 Repeatedly calling a function with the same arguments:
 ```javascript
 makeWrapper(console.log)("Hello, World")()();
@@ -46,6 +46,7 @@ makeWrapper(console.log)("Hello, World")()();
 // Hello, World
 // Hello, World
 ```
+
 Creating a table of test cases:
 ```javascript
 // takes a function as input and returns another function to be 
@@ -70,7 +71,8 @@ makeWrapper(addTest)
     (23,              22)  // Error: Test failed. 23 != 22
     (34,              35); // not executed
 ```
-In this case, `pass()` transfers the wrapper from `myObject` to the object returned by the second call to `myObject.myOtherMethod()`.
+### Object example with built in wrapper methods
+In this code, `pass()` transfers the wrapper from `myObject` to the object returned by the second call to `myObject.myOtherMethod()`.
 ```javascript
 makeWrapper(myObject)
     .myMethod
