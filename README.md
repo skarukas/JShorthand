@@ -1,4 +1,4 @@
-A small bit of code that allows chaining of JavaScript objects and functions with a simple wrapper; designed to make repeated calls to mutator methods (or other methods with unimportant return values) more syntactically elegant.
+A small bit of code that allows chaining of JavaScript objects and functions with a simple wrapper. Designed to make repeated calls to mutator methods (or other methods with unimportant return values) more syntactically elegant.
 
 # Syntactical Use Cases
 Modifying an array:
