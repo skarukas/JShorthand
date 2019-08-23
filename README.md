@@ -1,6 +1,4 @@
-# wrapper-chain
-
-Allows chaining of JavaScript objects and functions with a simple wrapper; designed to make repeated calls to mutator methods (or other methods with unimportant return values) more syntactically elegant.
+A small bit of code that allows chaining of JavaScript objects and functions with a simple wrapper; designed to make repeated calls to mutator methods (or other methods with unimportant return values) more syntactically elegant.
 
 ### Syntactical Use Cases
 Modifying an array:
@@ -87,24 +85,35 @@ makeWrapper(myObject)
     (/* ...args */)
     .val();            // the return value of otherObjectsMethod(), (unwrapped)
 ```
-### Brief Documentation
-#### public methods
-- `Wrapper.pass(targetObj?)`: Returns the wrapped (if possible) return value of the last function, `$currValue`.
-  - If `targetObj` is specified, it will be wrapped instead of the last return value.
-  - For clearer syntax, specifying `targetObj` should generally be avoided in favor of a separate statement,
-- `Wrapper.val()`: Returns `$currValue`, the (unwrapped) return value of the last function.
-- `Wrapper.unwrap()`: Returns `$ref`, the inner object.
-  - The object is stored by reference, so `unwrap()` isn't necessary in most cases.
-- `Wrapper.do(fn, ...args?)`: Calls `fn` with `Wrapper` as its first argument and `args` as the rest.
+### Documentation
+
+#### public `Wrapper` class methods*
+###### .pass(targetObj?)
+Returns the wrapped (if possible) return value of the last function, `$currValue`. If `targetObj` is specified, it will be wrapped instead of the last return value. However, beginning a separate wrapping statement is probably syntactically clearer.
+###### .val()
+Returns `$currValue`, the (unwrapped) return value of the last function.
+###### .unwrap()
+Returns `$ref`, the inner object. The object is stored by reference, so `unwrap()` isn't necessary in most cases.
+###### .do(fn, ...args?)
+Calls `fn` with `Wrapper` as its first argument and `args` as the rest.
 #### private fields
-- `Wrapper.$currMethod`: The name of the last called method. Initialized to `"$pass"`                 
-- `Wrapper.$ref`: A reference to the object being wrapped; immutable.
-- `Wrapper.$currValue`: The value returned by the last function. Initialized to `$ref`.
-- `Wrapper.$currArgs`: The last arguments passed to `$currMethod`.Initialized to `[]`.
-- `Wrapper.$pass()`: alias for `pass()`.
-- `Wrapper.$val()`: alias for `val()`.
-- `Wrapper.$unwrap()`: alias for `unwrap()`.
-- `Wrapper.$do()`: alias for `do()`.
+###### .$currMethod
+The name of the last called method. Initialized to `"$pass"`                 
+###### .$ref
+A reference to the object being wrapped; immutable.
+###### .$currValue
+The value returned by the last function. Initialized to `$ref`.
+###### .$currArgs
+The last arguments passed to `$currMethod`.Initialized to `[]`.
+###### .$pass()
+alias for `pass()`.
+###### .$val()
+alias for `val()`.
+###### .$unwrap()
+alias for `unwrap()`.
+###### .$do()
+alias for `do()`.
+
 The initialized values listed above result in the following "edge-cases":
 - `makeWrapper(myObj)()` calls `$pass()`, see below.
 - `makeWrapper(myObj).pass()` returns the wrapper, assuming no arguments are specified.
