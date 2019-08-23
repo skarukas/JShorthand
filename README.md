@@ -104,7 +104,7 @@ makeWrapper(myObject)
 - `Wrapper.$val()`: alias for `val()`.
 - `Wrapper.$unwrap()`: alias for `unwrap()`.
 - `Wrapper.$do()`: alias for `do()`.
-#### handling 
+#### handling of "edge-cases"
 - `makeWrapper(myObj)()` calls `$pass()`, see below
 - `makeWrapper(myObj).pass()` returns the wrapper if no arguments are specified
 - `makeWrapper(myObj).val()` returns the inner object, like `$unwrap()`
