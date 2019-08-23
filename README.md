@@ -108,6 +108,7 @@ A reference to the object being wrapped; immutable.
 The value returned by the last function. Initialized to `$ref`.
 #### `.$currArgs`
 The last arguments passed to `$currMethod`.Initialized to `[]`.
+
 **Aliases for public methods, in case those named methods already exist in the wrapped object:**
 #### `.$pass()`
 #### `.$val()`
