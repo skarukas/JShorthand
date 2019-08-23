@@ -119,4 +119,4 @@ alias for `do()`.
 The initialized values listed above result in the following "edge-cases":
 - `makeWrapper(myObj)()` calls `$pass()`, see below.
 - `makeWrapper(myObj).pass()` returns the wrapper, assuming no arguments are specified.
-- `makeWrapper(myObj).val()` returns $ref, the inner object.
+- `makeWrapper(myObj).val()` returns `$ref`, the inner object.
