@@ -88,13 +88,13 @@ makeWrapper(myObject)
     .val();            // the return value of otherObjectsMethod(), (unwrapped)
 ```
 #### public methods
-- `Wrapper.pass(targetObj?)`: Returns the wrapped (if possible) return value of the last function, `$currValue`
-  - If `targetObj` is specified, it will be wrapped instead of the last return value 
-  - For clearer syntax, specifying `targetObj` should generally be avoided in favor of a separate statement
-- `Wrapper.val()`: Returns `$currValue`, the (unwrapped) return value of the last function
-- `Wrapper.unwrap()`: Returns `$ref`, the inner object
-  - The object is stored by reference, so `unwrap()` isn't necessary in most cases
-- `Wrapper.do(fn, ...args?)`: Calls `fn` with `Wrapper` as its first argument and `args` as the rest
+- `Wrapper.pass(targetObj?)`: Returns the wrapped (if possible) return value of the last function, `$currValue`.
+  - If `targetObj` is specified, it will be wrapped instead of the last return value.
+  - For clearer syntax, specifying `targetObj` should generally be avoided in favor of a separate statement,
+- `Wrapper.val()`: Returns `$currValue`, the (unwrapped) return value of the last function.
+- `Wrapper.unwrap()`: Returns `$ref`, the inner object.
+  - The object is stored by reference, so `unwrap()` isn't necessary in most cases.
+- `Wrapper.do(fn, ...args?)`: Calls `fn` with `Wrapper` as its first argument and `args` as the rest.
 #### private fields
 - `Wrapper.$currMethod`: The name of the last called method. Initialized to `"$pass"`                 
 - `Wrapper.$ref`: A reference to the object being wrapped; immutable.
@@ -104,7 +104,7 @@ makeWrapper(myObject)
 - `Wrapper.$val()`: alias for `val()`.
 - `Wrapper.$unwrap()`: alias for `unwrap()`.
 - `Wrapper.$do()`: alias for `do()`.
-#### handling of "edge-cases"
-- `makeWrapper(myObj)()` calls `$pass()`, see below
-- `makeWrapper(myObj).pass()` returns the wrapper if no arguments are specified
-- `makeWrapper(myObj).val()` returns the inner object, like `$unwrap()`
+The initialized values listed above result in the following "edge-cases":
+- `makeWrapper(myObj)()` calls `$pass()`, see below.
+- `makeWrapper(myObj).pass()` returns the wrapper, assuming no arguments are specified.
+- `makeWrapper(myObj).val()` returns $ref, the inner object.
