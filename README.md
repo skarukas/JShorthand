@@ -1,6 +1,6 @@
 A small bit of code that allows chaining of JavaScript objects and functions with a simple wrapper; designed to make repeated calls to mutator methods (or other methods with unimportant return values) more syntactically elegant.
 
-### Syntactical Use Cases
+# Syntactical Use Cases
 Modifying an array:
 ```javascript
 var myArr = [6, 1, 2];
@@ -85,9 +85,9 @@ makeWrapper(myObject)
     (/* ...args */)
     .val();            // the return value of otherObjectsMethod(), (unwrapped)
 ```
-### Documentation
+# Documentation
 
-#### public `Wrapper` class methods*
+## public `Wrapper` class methods*
 ##### `.pass(targetObj?)`
 Returns the wrapped (if possible) return value of the last function, `$currValue`. If `targetObj` is specified, it will be wrapped instead of the last return value. However, beginning a separate wrapping statement is probably syntactically clearer.
 ##### `.val()`
@@ -96,7 +96,7 @@ Returns `$currValue`, the (unwrapped) return value of the last function.
 Returns `$ref`, the inner object. The object is stored by reference, so `unwrap()` isn't necessary in most cases.
 ##### `.do(fn, ...args?)`
 Calls `fn` with `Wrapper` as its first argument and `args` as the rest.
-#### private fields
+## private fields
 ##### `.$currMethod`
 The name of the last called method. Initialized to `"$pass"`                 
 ##### `.$ref`
