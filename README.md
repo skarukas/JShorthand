@@ -121,5 +121,5 @@ The initialized values listed above result in the following "edge-cases":
 - `makeWrapper(myObj).pass()` returns the wrapper, assuming no arguments are specified.
 - `makeWrapper(myObj).val()` returns `$ref`, the inner object.
 
-##### Current Issues
+### Current Issues
 - As a `Function`, `Wrapper` has read-only properties `length` and `name` which cannot be overwritten. This causes a problem when wrapping any collection-type object or any other object with those named properties. In general, fields that cannot be overwritten are made accessible by prepending $, like `.$length` or `.$name`.
