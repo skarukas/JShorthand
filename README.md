@@ -88,7 +88,7 @@ makeWrapper(myObject)
 ### Documentation
 
 #### public `Wrapper` class methods*
-###### .pass(targetObj?)
+###### `.pass(targetObj?)`
 Returns the wrapped (if possible) return value of the last function, `$currValue`. If `targetObj` is specified, it will be wrapped instead of the last return value. However, beginning a separate wrapping statement is probably syntactically clearer.
 ###### .val()
 Returns `$currValue`, the (unwrapped) return value of the last function.
