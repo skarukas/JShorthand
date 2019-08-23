@@ -2,7 +2,7 @@
 
 Allows chaining of JavaScript objects and functions with a simple wrapper; designed to make repeated calls to mutator methods (or other methods with unimportant return values) more syntactically elegant.
 
-# Syntactical Use Cases
+## Syntactical Use Cases
 Modifying an array:
 ```javascript
 var myArr = [6, 1, 2];
@@ -87,6 +87,7 @@ makeWrapper(myObject)
     (/* ...args */)
     .val();            // the return value of otherObjectsMethod(), (unwrapped)
 ```
+## Brief Documentation
 #### public methods
 - `Wrapper.pass(targetObj?)`: Returns the wrapped (if possible) return value of the last function, `$currValue`.
   - If `targetObj` is specified, it will be wrapped instead of the last return value.
