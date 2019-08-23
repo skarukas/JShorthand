@@ -108,14 +108,11 @@ A reference to the object being wrapped; immutable.
 The value returned by the last function. Initialized to `$ref`.
 #### `.$currArgs`
 The last arguments passed to `$currMethod`.Initialized to `[]`.
+##### Aliases for public methods, in case those named methods already exist in the wrapped object
 #### `.$pass()`
-alias for `pass()`.
 #### `.$val()`
-alias for `val()`.
 #### `.$unwrap()`
-alias for `unwrap()`.
 #### `.$do()`
-alias for `do()`.
 
 The initialized values listed above result in the following "edge-cases":
 - `makeWrapper(myObj)()` calls `$pass()`, see below.
