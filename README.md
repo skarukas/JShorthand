@@ -90,7 +90,7 @@ makeWrapper(myObject)
 # Documentation
 
 ## public `Wrapper` class* methods
-**Each `Wrapper` created is technically not an instance of a class because it's a callable object created within `makeWrapper()` rather than with the `new` keyword. It's technically an instance of `Function` which is important because this may lead to property name conflicts (see **Known Issues** below).*
+**Each `Wrapper` created is technically not an instance of a class because it's a callable object created within `makeWrapper()` rather than with the `new` keyword. It's technically an instance of `Function`, which is important because this may lead to property name conflicts (see **Known Issues** below).*
 #### `.pass(targetObj?)`
 Returns the wrapped (if possible) return value of the last function, `$currValue`. If `targetObj` is specified, it will be wrapped instead of the last return value. However, beginning a separate wrapping statement is probably syntactically clearer.
 #### `.val()`
@@ -121,4 +121,4 @@ The initialized values listed above result in the following "edge-cases":
 - `makeWrapper(myObj).val()` returns `$ref`, the inner object.
 
 ### Known Issues
-- As a `Function`, `Wrapper` has read-only properties `length` and `name` which cannot be overwritten. This creates a conflict when wrapping any collection-type object or any other object with those named properties. In general, properties names that create a conflict may be accessed by by prepending $, like `.$length` or `.$name`.
+- As a `Function`, `Wrapper` has read-only properties `length` and `name` which cannot be overwritten. This creates a conflict when wrapping any collection-type object or any other object with those named properties. In general, properties names that create a conflict may be accessed by prepending $, like `.$length` or `.$name`.
