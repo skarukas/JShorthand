@@ -20,104 +20,124 @@ function chain(fn) {
     return inner;
 }
 
+
 // for wrapping any (non-native) objects to make the methods chainable by 
 //     returning the wrapper after every method call
 // to get the "real" return value from the wrapper after a method 
 //     call, wrapper.val() 
 // all methods mutate the original object, so there's no need to unwrap it, 
 //     however, you can call wrapper.unwrap() to return the object
-// will not overwrite fields already in Function, so watch out for length, name
 function wrap(obj) {
-    var wrapper = function() { return wrapper[wrapper.$currMethod].apply(wrapper, arguments) }
+    const handler = {
+        // add apply functionalities
+        get: function(target, name) {
+            if (name == "toString") {
+                //console.log("toString() called: " + target.____currValue.toString());
+                return function() {
+                    return target.____currValue.toString();
+                }
+            } else if (name == "valueOf") {
+                //console.log("valueOf() called: " + target.____currValue.valueOf());
+                return function() {
+                    return target.____currValue.valueOf();
+                }
+            } else {
 
-    Object.defineProperty(wrapper, "$ref", {
-        value: obj,
-        writable: false
-    });
+                if (target.____ref[name] !== undefined) {
+                    // 1. search for the field in the wrapped object
+                    if (typeof target.____ref[name] == "function") {
+                        
+                        // return the function which, once called, returns the Proxy
+                        // note that methods cannot be safely passed as data if retrieved from a wrapper
+                        return function(...args) {
+                            
+                            // name is the name of the function
+                            if (target.____currMethod !== name) {
+                                // a different method, so call it with the specified args
+                                target.____currMethod = name;
+                                target.____currArgs = args;
+                                //console.log("defaulting to " + target.____currMethod + "(" + target.____currArgs + ")");
+                            } else {
+                                if (args.length === 0) { 
+                                    // the same method as last time, so reapply same arguments if none have been specified
+                                    args = target.____currArgs;
+                                } else {
+                                    target.____currArgs = args;
+                                }
+                            }
+                            //console.log(name + "(" + args + ")");
+                            // call the method with the specified arguments and store the result
+                            target.____currValue = obj[name].apply(obj, args) || target.____currValue;
+
+                            return wrapper;
+                        }
+                    } else {
+                        // return the property of the inner object
+                        return target.____ref[name];
+                    }
+
+                } else if (target.____currValue[name] !== undefined) { 
+                    // 2. search in the last returned object
+
+                    // Note that this simply accesses the property or calls the method, breaking the chain
+                    return target.____currValue[name];
+                } else {
+                    // 3. search in the wrapper
+
+                    return target[name];
+                }
+            }
+        },
+        set: function(target, property, value, receiver) {
+            // set() is forwarded to the inner object
+            return Reflect.set(target.____ref, property, value, receiver);
+        }
+    };
+    const callable = function(...args) { return wrapper[callable.____currMethod].apply(callable, args) };
+    const wrapper = new Proxy(callable, handler);
+
 
     // private fields
-    wrapper.$isWrapper = true;
-    wrapper.$currValue = wrapper.$ref;
-    wrapper.$currMethod = "$pass";
-    wrapper.$currArgs = [];
-    wrapper.$pass = function(targetObj) { 
-        var result = targetObj || wrapper.$currValue;
+    callable.____ref = obj;
+    callable.____isWrapper = true;
+    callable.____currValue = callable.____ref;
+    callable.____currMethod = "____pass";
+    callable.____currArgs = [];
+    callable.toString = callable.____currValue.toString;
+    callable.valueOf = callable.____currValue.valueOf;
 
-        wrapper.$currArgs = [];
-        wrapper.$currMethod = "$pass";
-        wrapper.$currValue = wrapper.$ref;
+    // private methods
+    callable.____pass = function(targetObj = callable.____currValue) { 
+
+        callable.____currArgs = [];
+        callable.____currMethod = "____pass";
+        callable.____currValue = callable.____ref;
         
-        if (result == null)              throw new TypeError("Cannot pass to an undefined return value.");
-        else if (result == wrapper.$ref) return wrapper;
-        else                             return makeWrapper(result);
+        if      (targetObj == null)          throw new TypeError("Cannot pass to an undefined return value.");
+        else if (targetObj == callable.____ref) return wrapper;
+        else                                 return makeWrapper(targetObj);
     }
-    wrapper.$unwrap = function() { return wrapper.$ref }
-    wrapper.$val = function() { return wrapper.$currValue }
-    wrapper.$do = function(fn) {
-        var args = Array.prototype.slice.call(arguments);
-        args[0] = wrapper;
-
-        wrapper.$currArgs = arguments;
-        wrapper.$currMethod = "$do";
-        wrapper.$currValue = fn.apply(this, args);
-
+    callable.____unwrap = () => callable.____ref;
+    callable.____val = () => callable.____currValue;
+    callable.____do = function(fn, ...args) {
+        callable.____currArgs = [];
+        callable.____currMethod = "____do";
+        args.unshift(callable.____ref);
+        callable.____currValue = fn.apply(callable.____ref, args) || callable.____currValue;
         return wrapper;
     }
     
-    // public methods
-    wrapper.pass = wrapper.$pass;
-    wrapper.unwrap = wrapper.$unwrap;
-    wrapper.val = wrapper.$val;
-    wrapper.do = wrapper.$do;
-    wrapper.toString = function() { return wrapper.$currValue.toString() }
-    wrapper.valueOf = function() { return wrapper.$currValue }
-
-    var fields = getAllProperties(obj);
-    for (var i = 0; i < fields.length; i++) {
-        var field = fields[i];
-        if (obj[field] instanceof Function) {
-            addWrappedMethod(field);
-        } else if (obj.hasOwnProperty(field)) {
-            addWrappedProperty(field);
+    // create public methods, making aliases if necessary
+    const public = ["pass", "unwrap", "val", "do"];
+    for (let methodName of public) {
+        let alias = methodName;
+        if (alias in obj) {
+            do { alias = "$" + alias } while (alias in obj);
+            if (console.log) console.log("Warning: The wrapper method '" + methodName + "()' creates a collision and has been renamed '" + alias + "()'");
         }
+        callable[alias] = callable["____" + methodName];
     }
     return wrapper;
-
-
-    // utility methods
-    function getAllProperties(obj) {
-        if (Object.getPrototypeOf(obj) == null) return []; // doesn't inherit the Object properties
-        return Object.getOwnPropertyNames(obj).concat(getAllProperties(Object.getPrototypeOf(obj)));
-    }
-
-    function addWrappedMethod(name) {
-        if (Function.hasOwnProperty(name)) name = "$" + name; // avoids "length", "name", "prototype" conflicts
-
-        if (name !== "toString" && name !== "valueOf") {
-            wrapper[name] = function() {
-                var args;
-                if (wrapper.$currMethod == name && !arguments.length) {
-                    args = wrapper.$currArgs;
-                } else {
-                    args = arguments;
-                    wrapper.$currMethod = name;
-                    wrapper.$currArgs = args;
-                }
-                wrapper.$currValue = obj[name].apply(obj, args);
-                return wrapper;
-            }
-        }
-    }
-
-    function addWrappedProperty(name) {
-        if (wrapper[name] == null) {
-            Object.defineProperty(wrapper, name, {
-                configurable: true,
-                get: function() { return obj[name] },
-                set: function(val) { obj[name] = val }
-            });
-        }
-    }
 }
 
 module.exports = makeWrapper;

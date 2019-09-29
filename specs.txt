@@ -1,0 +1,188 @@
+/*
+Specifications:
+
+- a wrapped Function will be called, its return value stored in $currValue, then a 
+    copy of the Function will be returned, available to be called immediately. 
+    This is useful for repeatedly posting something to the console, creating a table of test cases,
+    or repeatedly mutating an object--basically, any function whose return value isn't needed.
+    
+    examples:
+    console.log("foo");
+    console.log(obj1.props.length / 2);
+    console.log(37);
+
+    makeWrapper(console.log)
+    ("foo")
+    (obj1.props.length / 2)
+    (37);
+
+    assertEqual(arr1.length, 5);
+    assertEqual(arr1[0], "Christmas");
+    assertEqual(arr1[3], "Halloween");
+    assertEqual(foo(5),  [1, 2, 3, 4, 5]);
+
+    makeWrapper(assertEqual)
+    (arr1.length,   5)
+    (arr1[0],       "Christmas")
+    (arr1[3],       "Halloween")
+    (foo(5),        [1, 2, 3, 4, 5]);
+
+    //=========
+
+    function hideProperty(obj, field) {
+        var spliced = obj[field];
+        obj[field] = "secret!";
+        return spliced;
+    }
+
+    var myObj = {
+        one: 1,
+        two: 2,
+        three: 3
+    }
+
+    // $currValue stores the actual return value of the last operation
+    makeWrapper(hideProperty)
+    (myObj, "one")
+    (myObj, "two")
+    (myObj, "three").$currValue; // 3
+
+    myObj; // {"one": "secret!", "two": "secret!", "three": "secret!" }
+
+
+- if toString() or valueOf() are implicitly or explicitly called upon
+    the wrapper, these methods will be called upon $currValue, not $inner.
+    This allows the programmer to log the result ("actual return value") 
+    of operations without directly accessing $currValue
+
+- In short, at any time, the wrapper may work in three ways:
+    1. As a Function which may be immediately invoked to call the previous method again
+    2. As an Object with access to all properties and methods of the wrapped object
+    3. As the primitive value returned from the previous method (rather than a complex 
+        function which cannot be read in any simple way)
+*/
+
+
+What is this product supposed to be?
+
+- A lightweight, predictable wrapper that allows 
+    simplification of function syntax
+
+Who is the user?
+
+- A programmer writing object oriented code
+
+What would the user expect from this product?
+
+
+
+What would the user want from this product?
+
+- Overall, organization and simplicity of syntax
+- Not bulky
+- 100% reliable
+- the ability to access ALL properties and methods of the wrapped object,
+    including length and name
+- the ability to remove the wrapper at any time without fear of 
+    corrupting the data
+- Clear, concise errors when the product is used incorrectly
+
+
+
+What would the user want, in general?
+
+What would be the best possible version of this product?
+- avoids collision between method/property names of the internal object vs wrapper, always giving preference to the internal
+- contains methods that allow programmers to access the internal object, transfer the makeWrappering capabilities mid-statement, and retrieve the 
+    return value at any time
+
+
+
+mutable types: each method call returns the original Object -- including Functions. Any new fields defined while wrapped will be lost.
+
+Note that although the wrapped object is referred to as Wrapper, there is no Wrapper class--the wrapper is an instance of
+Function that includes methods and properties, a sort of callable Object
+Note also that wrappers cannot be compared for equality
+Note that if there is a method that takes either zero or a number of arguments, the first set of arguments will be passed if the method(args)()()() syntax is used.
+
+
+"public" name               "private" alias               description
+
+Wrapper.pass(targetObj?)    Wrapper.$pass(targetObj?)   // returns the wrapped (if possible) return value of the last function, $currValue
+                                                            -If targetObj is specified, it will be wrapped instead of the last return value
+                                                            -For clearer syntax, specifying targetObj should generally 
+                                                                be avoided in favor of a separate statement
+Wrapper.val()               Wrapper.$val()              // returns $currValue, the (unwrapped) return value of the last function
+Wrapper.unwrap()            Wrapper.$unwrap()           // returns $ref, the inner object
+                                                            -The object is stored by reference, so unwrap() isn't necessary in most cases
+Wrapper.do(fn, ...args?)    Wrapper.$do(fn, ...args?)   // calls fn with Wrapper as its first argument and args as the rest
+
+property                initial value           description
+
+Wrapper.$currMethod     "$pass"                 // The name of the last called method
+Wrapper.$ref            obj (input)             // A reference to the object being wrapped; immutable
+Wrapper.$currValue      obj (input)             // The value returned by the last function
+Wrapper.$currArgs       []                      // The last arguments passed to $currMethod
+
+
+// handling 
+
+// makeWrapper(myObj)()      calls $pass(), see below
+// makeWrapper(myObj).pass() returns the wrapper if no arguments are specified
+// makeWrapper(myObj).val()  returns the inner object, like $unwrap()
+
+===== Syntactical Use Cases =====
+
+makeWrapper(myFunction)
+    (/* first call */)
+    (/* second call */)
+    (/* third call */)
+    (/* fourth call */);
+
+makeWrapper(myFunction)
+    (/* first call */)
+    ()  // first call repeated with those arguments
+    ()  // first call repeated with those arguments
+    (); // first call repeated with those arguments
+
+
+// the assumption here is that myCurriedAssertFunction() takes a function as input 
+//    and returns another function, verifying the input argument produces the expected result.
+makeWrapper(myCurriedAssertFunction(myFunc))
+    (/* input */,            /* expectedOutput */)
+    (/* input */,            /* expectedOutput */)
+    (/* input */,            /* expectedOutput */)
+    (/* input */,            /* expectedOutput */);
+
+makeWrapper(myObject)
+    .myMethod
+    (/* ...args */)
+    (/* ...args */)
+    .myOtherMethod          // this method returns a different object
+    (/* ...args */)
+    (/* ...args */)
+    .pass()                 // now, calls refer to the new object (wrapped)
+    .otherObjectsMethod     
+    (/* ...args */)
+    (/* ...args */)
+    .val();                 // the return value of otherObjectsMethod(), unwrapped
+
+===== Test cases =====
+
+makeWrapper(makeWrapper(myObj)); // TypeError: Wrappers cannot be rewrapped.
+                Cannot pass to an undefined return value.
+assertEqual(makeWrapper(myObject), makeWrapper(myObject)()()); 
+
+var a = makeWrapper(myObject).myMutatorMethod(/* ...args */)(/* ...args */).unwrap();
+assertEqual(myObject, a); // myObject has been mutated
+
+var a = makeWrapper(myObject);
+var b = makeWrapper(myObject)();
+var c = makeWrapper(myObject).pass();
+
+var d = makeWrapper(myObject).pass(myOtherObject);
+var e = makeWrapper(myOtherObject);
+
+assertEqual(a, b);
+assertEqual(b, c);
+assertEqual(d, e);
