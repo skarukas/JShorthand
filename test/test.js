@@ -89,15 +89,22 @@
     let d = newWrap.pass(o).unwrap();
     let e = ___(o).unwrap();
     
-    Assert.equal(a, b);
-    Assert.equal(b, c);
-    Assert.equal(d, e);
     ___(Assert.equal)
-    (1, 1.0)
-    (-0, 0)
-    ("hi", 'hi');
+        (a, b)
+        (b, c)
+        (d, e);
 
-    // test set!!!
+    newWrap.set("value", 69)
+                ("set", "setttt")
+                ("name", "sally")
+            .$set("val", 31);
+
+    ___(Assert.equal)
+        (myObject.value, 69)
+        (myObject.set, "setttt")
+        (myObject.name, "sally")
+        (myObject.val, 31);
+
 
 /* 
     ___(Log.post)
