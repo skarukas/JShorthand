@@ -1,8 +1,6 @@
 module.exports = function makeWrapper(obj) {
-    // can't wrap wrappers or primitives
     if (!(obj instanceof Object)) throw new TypeError("Primitive types cannot be wrapped.");
     else if (obj.$_isWrapper) return obj;
-        
     else { 
         // create Proxy handler
         const HANDLER = {
@@ -110,7 +108,7 @@ module.exports = function makeWrapper(obj) {
         }
 
         function renameWarning(name, alias) {
-            if (console.warn) console.warn("JShorthand: The wrapper method '" + name + "()' has been renamed '" + alias + "()'");
+            console.warn && console.warn("JShorthand: The wrapper method '" + name + "()' has been renamed '" + alias + "()'");
         }
 
         return PUBLIC_PROXY;
