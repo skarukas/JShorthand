@@ -2,7 +2,7 @@
     const ___ = require("../jshorthand");
     const Assert = require("./assert");
     const Log = require("./log");
-
+ 
     const p = {
         valueOf : () => 4,
     }
