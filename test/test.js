@@ -1,5 +1,5 @@
 (function() {
-    const ___ = require("../wrapper-chain");
+    const ___ = require("../jshorthand");
     const Assert = require("./assert");
     const Log = require("./log");
 
@@ -56,8 +56,6 @@
     // val() returns last returned value
     Assert.equal(wrapped.nothing().val(), "nothing");
 
-    //console.log("wrapped.nothing().toString is " + typeof wrapped.nothing().toString);
-
     // implicit toString() returns String value of last returned value
     Assert.equal(wrapped.nothing(), "nothing");
 
@@ -94,6 +92,12 @@
     Assert.equal(a, b);
     Assert.equal(b, c);
     Assert.equal(d, e);
+    ___(Assert.equal)
+    (1, 1.0)
+    (-0, 0)
+    ("hi", 'hi');
+
+    // test set!!!
 
 /* 
     ___(Log.post)

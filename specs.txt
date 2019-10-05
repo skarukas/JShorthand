@@ -48,7 +48,7 @@ Specifications:
     (myObj, "three").$currValue; // 3
 
     myObj; // {"one": "secret!", "two": "secret!", "three": "secret!" }
-
+ 
 - if toString() or valueOf() are implicitly or explicitly called upon
     the wrapper, these methods will be called upon $currValue, not $inner.
     This allows the programmer to log the result ("actual return value") 
