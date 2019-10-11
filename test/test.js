@@ -48,16 +48,26 @@
     wrapped.shrink(2)()().lengthen(3)()();
     Assert.equal(wrapped.length, newLen);
 
+    // making sure argument from previous method doesn't transfer over
+    newLen = (wrapped.length - 6) + 2;
+    wrapped.shrink(2)()().lengthen()();
+    Assert.equal(wrapped.length, newLen);
+
     // repeated calling, changing arguments
     newLen = (wrapped.length - 7) + 4;
     wrapped.shrink(3)(4).lengthen(2)(0)()(1)();
     Assert.equal(wrapped.length, newLen);
 
+    wrapped.nothing().val()
     // val() returns last returned value
     Assert.equal(wrapped.nothing().val(), "nothing");
 
     // implicit toString() returns String value of last returned value
     Assert.equal(wrapped.nothing(), "nothing");
+
+    // using method calls of the last returned value
+    Assert.equal(wrapped.nothing().substring(2, 6), "thin");
+    Assert.equal(wrapped.nothing()[3], "h");
 
     // implicit valueOf() returns numeric value of last returned value
     Assert.equal(wrapped.self(), 4);
@@ -65,10 +75,35 @@
     // callbacks with do()
     newLen = wrapped.length + 4;
     Assert.equal(wrapped.lengthen()()()()
-                    .do((obj) => obj.length === newLen)
+                    .do(function() { this.length === newLen })
                     .val(),
                 true);
 
+    const fakeError = new Error("Didn't throw a real error!");
+
+    // object properties cannot be set
+    try {
+        wrapped.length = 5;
+        throw fakeError;
+    } catch (e) {
+        Assert.equal(e.message, "Forbidden. Use set() to set inner object fields.");
+    }
+
+    // primitives cannot be wrapped
+    try {
+        ___("I'm a string");
+        throw fakeError;
+    } catch (e) {
+        Assert.equal(e.message, "Primitive types cannot be wrapped.");
+    }
+
+    // cannot pass to undefined return value
+    try {
+        wrapped.pass(null);
+        throw fakeError;
+    } catch (e) {
+        Assert.equal(e.message, "Cannot pass to an undefined return value.");
+    }
 
     const myObject = {
         value: 4,
@@ -79,20 +114,24 @@
         getValue: function() { return this.value }
     }
     let newWrap = ___(myObject);
-    let unwrapped = newWrap.add(4)(5)()()().unwrap();
+    let unwrapped = newWrap.add(4)(5)()()().ref;
     Assert.equal(myObject, unwrapped); // myObject has been mutated
     
     let a = newWrap;
     let b = a();
     let c = a.pass();
     
-    let d = newWrap.pass(o).unwrap();
-    let e = ___(o).unwrap();
-    
+    let d = newWrap.pass(o).ref;
+    let e = ___(o).ref;
+
+
+    ___(Assert.equal)(a, b);
+
     ___(Assert.equal)
         (a, b)
         (b, c)
         (d, e);
+
 
     newWrap.set("value", 69)
                 ("set", "setttt")
@@ -104,49 +143,4 @@
         (myObject.set, "setttt")
         (myObject.name, "sally")
         (myObject.val, 31);
-
-
-/* 
-    ___(Log.post)
-    (wrapped.$currMethod)
-    (wrapped.$currValue)
-    (wrapped.lengths)
-    (wrapped.names)
-    (wrapped.inner.a);
-
-    wrapped.lengths = wrapped.lengths / 2;
-
-    Log.post("*******TESTS**********");
-
-    ___(Assert.equal)
-    (o.lengths, wrapped.lengths)
-    (o.names, wrapped.names)
-    (o, wrapped.unwrap());
-
-    wrapped.names = "greggo";
-
-    Log.post(JSON.stringify(o));
-
-    ___(Log.post)
-    (wrapped.inner.a) // "nice cuppa"
-    (o.inner.b)    // "yummy cuppa"
-    (wrapped.inner.c) // 56
-    (___([5, 12, 73, 8, 9])
-        .splice(1, 0)
-        .push(0.2)()()()()
-        .sort()
-        .unwrap())
-    (wrapped);
- */
-
-
-    /* 
-    ___(___(myObject)); // No error, just has no effect
-    ___(myObject).add()().pass(); // TypeError: Cannot pass to an undefined return value.
-    ___("heyo"); // TypeError: Immutable types cannot be wrapped.
-    ___(myObject).getValue().pass(); // TypeError: Immutable types cannot be wrapped.
-    ___(myObject).pass("hihi"); // TypeError: Immutable types cannot be wrapped.
-     */
-    
-
 })();
